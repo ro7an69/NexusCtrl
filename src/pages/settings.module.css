@@ -1,0 +1,107 @@
+/* settings.module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the top */
+  margin-top: 50px;
+}
+
+.cameraContainer {
+  flex: 0 1 45%;
+  padding: 20px;
+  margin: 10px;
+  border: 1px solid black; /* Add a border around the camera container */
+  text-align: center; /* Center the content horizontally */
+}
+
+.cameraHeading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #05028F;
+}
+
+.settingsHeading {
+  font-size: 24px;
+  font-weight: bold;
+  color: #05028F;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.camera video {
+  max-width: 100%; /* This ensures the video fits within the container */
+  height: auto; /* Maintain the aspect ratio of the video */
+  border: 1px solid black; /* Optional: Add a border around the video */
+}
+
+.gestures {
+  flex: 1;
+  padding: 20px;
+}
+
+.slider-container {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.slider-label {
+  display: block;
+  font-weight: normal;
+  color: #05028F;
+  width: 150px;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.slider {
+  width: 60%;
+  border-radius: 5px;
+  height: 10px;
+}
+
+.slider-value {
+  display: inline-block;
+  margin-left: 10px;
+  color: darkblue;
+  width: 40px;
+  height: 20px;
+  border: 1px solid darkblue;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 5px;
+}
+
+/* Increased spacing for Select Mode and Select Keyboard Size */
+.keyboardSize {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px; /* Increase this value to add more spacing */
+}
+
+.keyboardSize span {
+  color: #05028F;
+  width: 150px;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.keyboardSize button {
+  margin-right: 10px;
+  padding: 16px 32px;
+  font-size: 18px;
+  border: none;
+  background: #9AB3FF;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.keyboardSize button:hover {
+  background: #0046FD;
+}
+
+/* Add some spacing between buttons and text */
+.keyboardSize button:first-child {
+  margin-left: 10px;
+}
