@@ -8,8 +8,10 @@ import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
-from CSIT_321_PROJECT_NEXUS_CTRL_.backend import mp_hand_gesture
-DATA_DIR1 = os.path.join(os.path.dirname(backend.mp_hand_gesture), 'data')
+from nexus_ctrl.backend import mp_hand_gesture
+from nexus_ctrl.backend.mp_hand_gesture import gesture_names  # Import gesture_names
+
+DATA_DIR1 = os.path.join(os.path.dirname(mp_hand_gesture.__file__), 'data')  # Use mp_hand_gesture.__file__
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -23,11 +25,12 @@ mp_drawing_styles = mp.solutions.drawing_styles
 model = load_model(DATA_DIR1)
 
 # Define the file path
-file_path = os.path.join(DATA_DIR1, 'gesture_names')
+file_path = os.path.join(DATA_DIR1, gesture_names)  # Use gesture_names from mp_hand_gesture
 
 # Load class names
 with open(file_path) as some_file:
     classNames = some_file.read().split('\n')
+
 
 # Print class names
 print(classNames)
