@@ -8,8 +8,7 @@ import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
-import backend.mp_hand_gesture
-
+from CSIT_321_PROJECT_NEXUS_CTRL_.backend import mp_hand_gesture
 DATA_DIR1 = os.path.join(os.path.dirname(backend.mp_hand_gesture), 'data')
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
