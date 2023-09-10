@@ -11,8 +11,16 @@ hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-model = load_model('C:\\Users\\Divraj\\Documents\\GitHub\\Project\\NexusCtrl\\backend\\mp_hand_gesture')
-with open('C:\\Users\\Divraj\\Documents\\GitHub\\Project\\NexusCtrl\\backend\\gesture.names', 'r') as f:
+# Get the directory of the current script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+# Define the relative paths within your project structure
+model_dir = os.path.join(script_dir, 'mp_hand_gesture')
+names_file = os.path.join(script_dir, 'gesture.names')
+# Load the model
+model = load_model(model_dir)
+
+# Load class names
+with open(names_file, 'r') as f:
     classNames = f.read().split('\n')
 
 print(classNames)
