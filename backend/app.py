@@ -6,10 +6,6 @@ from tensorflow.keras.models import load_model
 import os
 from mp_hand_gesture import test  # Import gesture_names
 
-DATA_DIR1 = os.path.join(os.path.dirname(test.__file__))  # Use mp_hand_gesture.__file__
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 # Initialize mediapipe
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
@@ -17,20 +13,11 @@ mpDraw = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
 # Load the gesture recognizer model
-model = load_model(DATA_DIR1)
+model = load_model(test)
+with open('gesture.names', 'r') as f:
+    classNames = f.read().split('\n')
 
-# Define the file path
-file_path = os.path.join(DATA_DIR1, "gesture.names")  # Use gesture_names from mp_hand_gesture
-
-# Load class names
-with open(file_path) as some_file:
-    classNames = some_file.read().split('\n')
-
-
-# Print class names
 print(classNames)
-
-
 
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
