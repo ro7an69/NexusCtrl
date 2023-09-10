@@ -78,8 +78,8 @@ while True:
             # Calculate the cursor position relative to the screen size
             cursor_x = int(index_finger_x * screen_width / x)
             cursor_y = int(index_finger_y * screen_height / y)
-            
-            
+            #cursor_speed = 10  # Adjust cursor speed as needed
+            #pyautogui.moveTo(index_finger_x, index_finger_y, duration=0.1 / cursor_speed)
             #############################################################FUNCTIONS
             if fingerCount == 1:
             # Move the cursor to the calculated position
