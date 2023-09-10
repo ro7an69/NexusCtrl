@@ -105,6 +105,12 @@ while True:
 
     cv2.putText(frame, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
 
+    if fingerCount == 1:
+        # Define the cursor movement speed
+        movement_speed = 10
+        # Move the cursor right by the specified speed
+        pyautogui.moveRel(movement_speed, 0)
+        
     # Show the final output
     cv2.imshow("Output", frame) 
 
