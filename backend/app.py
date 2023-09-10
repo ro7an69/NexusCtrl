@@ -1,17 +1,12 @@
-# TechVidvan hand Gesture Recognizer
-
-# import necessary packages
-
 import cv2
 import numpy as np
 import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
-from nexus_ctrl.backend import mp_hand_gesture
-from nexus_ctrl.backend.mp_hand_gesture import gesture_names  # Import gesture_names
+from mp_hand_gesture import test  # Import gesture_names
 
-DATA_DIR1 = os.path.join(os.path.dirname(mp_hand_gesture.__file__), 'data')  # Use mp_hand_gesture.__file__
+DATA_DIR1 = os.path.join(os.path.dirname(test.__file__))  # Use mp_hand_gesture.__file__
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -25,7 +20,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 model = load_model(DATA_DIR1)
 
 # Define the file path
-file_path = os.path.join(DATA_DIR1, gesture_names)  # Use gesture_names from mp_hand_gesture
+file_path = os.path.join(DATA_DIR1, "gesture.names")  # Use gesture_names from mp_hand_gesture
 
 # Load class names
 with open(file_path) as some_file:
