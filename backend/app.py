@@ -4,20 +4,15 @@ import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
-from mp_hand_gesture import test  # Import gesture_names
 
 # Initialize mediapipe
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
-current_directory = os.getcwd()
 
-# Print the current directory
-print("Current Directory:", current_directory)
-# Load the gesture recognizer model
-model = load_model('C:\\Users\\Divraj\\Documents\\GitHub\\CSIT-321-PROJECT-NEXUS-CTRL-\\CSIT-321-PROJECT-NEXUS-CTRL-\\backend\\mp_hand_gesture\\test')
-with open('gesture.names', 'r') as f:
+model = load_model('C:\\Users\\Divraj\\Documents\\GitHub\\Project\\NexusCtrl\\backend\\mp_hand_gesture')
+with open('C:\\Users\\Divraj\\Documents\\GitHub\\Project\\NexusCtrl\\backend\\gesture.names', 'r') as f:
     classNames = f.read().split('\n')
 
 print(classNames)
