@@ -76,9 +76,19 @@ while True:
 
             # Other fingers: TIP y position must be lower than PIP y position,
             # as image origin is in the upper left corner.
-            if handLandmarks[4][0] < handLandmarks[3][0]:
-                fingerCount += 1
-                fingersUp.append("Thumb")
+            handIndex = result.multi_hand_landmarks.index(handslms)
+            handLabel = result.multi_handedness[handIndex].classification[0].label
+
+# Other fingers: TIP y position must be lower than PIP y position,
+# as image origin is in the upper left corner.
+            if handLabel == "Left":
+                if handLandmarks[4][0] > handLandmarks[3][0]:  # Check for left thumb
+                    fingerCount += 1
+                    fingersUp.append("Left Thumb")
+            else:  # Right hand
+                if handLandmarks[4][0] < handLandmarks[3][0]:  # Check for right thumb
+                    fingerCount += 1
+                    fingersUp.append("Right Thumb")
             if handLandmarks[8][1] < handLandmarks[6][1]:  # Index finger
                 fingerCount += 1
                 fingersUp.append("Index")
