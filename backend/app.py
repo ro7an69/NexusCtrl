@@ -10,7 +10,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
 # Initialize mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
+hands = mpHands.Hands(max_num_hands=2, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
@@ -59,7 +59,6 @@ while True:
             for lm in handslms.landmark:
                 lmx = int(lm.x * x)
                 lmy = int(lm.y * y)
-
                 landmarks.append([lmx, lmy])
 
             # Drawing landmarks on frames
@@ -114,7 +113,6 @@ while True:
                 pyautogui.click()
             if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]):
                 subprocess.Popen('osk.exe', shell=True)
-                
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     cv2.putText(frame, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
