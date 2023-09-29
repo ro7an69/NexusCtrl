@@ -10,7 +10,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
 # Initialize mediapipe
 mpHands = mp.solutions.hands
-hands = mpHands.Hands(max_num_hands=2, min_detection_confidence=0.7)
+hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 mpDraw = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
@@ -30,6 +30,7 @@ with open(names_file, 'r') as f:
 cap = cv2.VideoCapture(0)
 width = 1280
 height = 720
+scaling_factor = 3.0
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
@@ -104,14 +105,14 @@ while True:
             
             index_finger_x, index_finger_y = handLandmarks[8]
             screen_width, screen_height = pyautogui.size()
-            cursor_x = int(index_finger_x * screen_width)
-            cursor_y = int(index_finger_y * screen_height)
+            cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
+            cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
             # Move the cursor to the calculated position
             if fingerCount == 1 and "Index" in fingersUp:
                 pyautogui.moveTo(cursor_x, cursor_y)
-            if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                pyautogui.click()
             if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]):
+                pyautogui.click()
+            if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
                 subprocess.Popen('osk.exe', shell=True)
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
