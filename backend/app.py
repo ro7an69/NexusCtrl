@@ -5,6 +5,7 @@ import pyautogui
 import os
 from tensorflow.keras.models import load_model
 import subprocess
+import time
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
@@ -26,13 +27,18 @@ model = load_model(model_dir)
 with open(names_file, 'r') as f:
     classNames = f.read().split('\n')
 
+print(classNames)
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
 width = 1280
 height = 720
-scaling_factor = 3.0
+scaling_factor = 2.0
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+smoothed_cursor_x = 0
+smoothed_cursor_y = 0
+
+delay_time = 2
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
@@ -52,7 +58,8 @@ while True:
     className = ''
     handLandmarks = []
     fingersUp = []
-
+    smoothing_factor = 0.2
+    
     # post-process the result
     if result.multi_hand_landmarks:
         landmarks = []
@@ -107,16 +114,31 @@ while True:
             screen_width, screen_height = pyautogui.size()
             cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
             cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
+            smoothed_cursor_x = smoothing_factor * cursor_x + (1 - smoothing_factor) * smoothed_cursor_x
+            smoothed_cursor_y = smoothing_factor * cursor_y + (1 - smoothing_factor) * smoothed_cursor_y
+            
             # Move the cursor to the calculated position
             if fingerCount == 1 and "Index" in fingersUp:
                 pyautogui.moveTo(cursor_x, cursor_y)
             if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]):
                 pyautogui.click()
+                time.sleep(delay_time)
+            if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]):
+                pyautogui.press('left')
+                time.sleep(delay_time)
+            if fingerCount == 1 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
+                pyautogui.rightClick()
+                time.sleep(delay_time)
+            if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
+                pyautogui.doubleClick()
+                time.sleep(delay_time)
+            if fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
+                pyautogui.middleClick()
+                time.sleep(delay_time)
             if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
                 subprocess.Popen('osk.exe', shell=True)
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
-    cv2.putText(frame, str(fingerCount), (50, 450), cv2.FONT_HERSHEY_SIMPLEX, 3, (255, 0, 0), 10)
     # Show the final output
     cv2.imshow("Output", frame)
     if cv2.waitKey(1) == ord('q'):
