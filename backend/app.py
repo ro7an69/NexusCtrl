@@ -37,7 +37,7 @@ cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 smoothed_cursor_x = 0
 smoothed_cursor_y = 0
-
+smoothing_factor = 0.5
 delay_time = 2
 
 # Get the screen width and height
@@ -58,7 +58,6 @@ while True:
     className = ''
     handLandmarks = []
     fingersUp = []
-    smoothing_factor = 0.2
     
     # post-process the result
     if result.multi_hand_landmarks:
@@ -88,6 +87,7 @@ while True:
 
 # Other fingers: TIP y position must be lower than PIP y position,
 # as image origin is in the upper left corner.
+
             if handLabel == "Left":
                 if handLandmarks[4][0] > handLandmarks[3][0]:  # Check for left thumb
                     fingerCount += 1
@@ -114,19 +114,19 @@ while True:
             screen_width, screen_height = pyautogui.size()
             cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
             cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
-            smoothed_cursor_x = smoothing_factor * cursor_x + (1 - smoothing_factor) * smoothed_cursor_x
-            smoothed_cursor_y = smoothing_factor * cursor_y + (1 - smoothing_factor) * smoothed_cursor_y
-            
+            smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
+            smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
+
             # Move the cursor to the calculated position
             if fingerCount == 1 and "Index" in fingersUp:
-                pyautogui.moveTo(cursor_x, cursor_y)
-            if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]):
+                pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
+            if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
                 pyautogui.click()
                 time.sleep(delay_time)
-            if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]):
+            if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                 pyautogui.press('left')
                 time.sleep(delay_time)
-            if fingerCount == 1 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
+            if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
                 pyautogui.rightClick()
                 time.sleep(delay_time)
             if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
@@ -137,6 +137,7 @@ while True:
                 time.sleep(delay_time)
             if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
                 subprocess.Popen('osk.exe', shell=True)
+                time.sleep(delay_time)
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     # Show the final output
