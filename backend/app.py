@@ -126,18 +126,18 @@ while True:
             if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                 pyautogui.press('left')
                 time.sleep(delay_time)
-            if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                pyautogui.rightClick()
-                time.sleep(delay_time)
-            if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                pyautogui.doubleClick()
-                time.sleep(delay_time)
-            if fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                pyautogui.middleClick()
-                time.sleep(delay_time)
-            if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                subprocess.Popen('osk.exe', shell=True)
-                time.sleep(delay_time)
+            #if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
+             #   pyautogui.rightClick()
+              #  time.sleep(delay_time)
+            #if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
+             #   pyautogui.doubleClick()
+              #  time.sleep(delay_time)
+            #if fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
+             #   pyautogui.middleClick()
+              #  time.sleep(delay_time)
+            #if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
+             #   subprocess.Popen('osk.exe', shell=True)
+              #  time.sleep(delay_time)
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     # Show the final output
