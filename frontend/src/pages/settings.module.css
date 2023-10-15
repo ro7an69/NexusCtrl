@@ -1,0 +1,29 @@
+/* settings.module.css */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.left{
+  flex: 1;
+  background-color: #f0f0f0;
+}
+.right{
+  flex: 1;
+  background-color: #e0e0e0;
+}
+
+.content {
+  color: #000;
+  font-family: Sarabun, sans-serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top:-300px;
+  margin-left: -500px;
+}

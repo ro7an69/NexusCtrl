@@ -1,0 +1,106 @@
+/* gesture.module.css */
+
+/* gesture.module.css */
+
+.sarala {
+  font-family: 'sarala-regular', sans-serif;
+  font-size: 40px;
+}
+
+/* Updated styles for the "Gestures" heading */
+.welcomeTitle {
+  font-family: Sarala; /* Updated font family */
+  font-size: 50px; /* Updated font size */
+  font-weight: 400;
+  text-align: center;
+  color: #000; /* Updated text color */
+}
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+/* ... (remaining CSS styles) */
+
+
+.content-box {
+  background-color: #DCE6FF47; /* Color for the box */
+  position: relative;
+  z-index: 1; /* Place above the background */
+  padding: 20px; /* Adjust padding as needed */
+  text-align: center; /* Center the content horizontally */
+}
+
+.pageTransition {
+  transition: opacity 3s ease-out;
+  opacity: 1;
+}
+
+.pageTransition-exit {
+  opacity: 1;
+}
+
+.pageTransition-exit-active {
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
+}
+
+.sectionTitle {
+  font-family: "Rounded Mplus 1c Bold", sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #05028F;
+  margin-bottom: 20px;
+}
+
+.gif {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(214, 224, 255, 0.28); /* Transparent background color */
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); /* Drop shadow */
+  padding: 8px; /* Add padding for spacing around the GIF */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Updated styles for the select element with default arrow */
+select {
+  display: inline-flex;
+  height: 42px;
+  padding: 6px 38px 0px 14px;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+  background: #F6F9FF;
+  box-shadow: 5px 5px 4px 0px rgba(0, 0, 0, 0.25);
+  appearance: none; /* Remove default arrow */
+  background-position: right 10px center;
+  width: 200px; /* Adjust width as needed */
+  font-size: 16px; /* Adjust font size as needed */
+  font-family: "Sarala-Regular", Helvetica; /* Adjust font family as needed */
+  border: 2px solid #555;
+  border-radius: 8px;
+  padding-right: 38px; /* Adjust the right padding to accommodate the default arrow */
+  cursor: pointer;
+  /* Add default arrow */
+  background-image: linear-gradient(45deg, transparent 50%, #000 50%),
+    linear-gradient(135deg, #000 50%, transparent 50%);
+  background-position: calc(100% - 12px) center, calc(100% - 7px) center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 600px) {
+  .dropdown {
+    flex-basis: 100%;
+  }
+
+  
+}
