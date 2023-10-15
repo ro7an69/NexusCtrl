@@ -1,4 +1,102 @@
-/* Add these styles to your home.module.css */
+body {
+  background-size: cover;
+  position: relative;
+  height: 100vh;
+}
+
+/* Add this section for split background */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%; /* Left half */
+  height: 100%;
+  background-color: #DCE6FF;
+  z-index: -1;
+}
+
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%; /* Right half */
+  height: 100%;
+  background-color: #ffffffff; /* Color for the right side */
+  z-index: -1;
+}
+.parent {
+  margin-top: -200px; /* Adjust the margin-top to move the button container up */
+  display: flex;
+  gap: 30px;
+  margin: 20px auto; /* Adjust the margin for centering */
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  
+ 
+}
+.child {
+  
+  width: 220px;
+  height: 59px; /* Fixed height */
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #000;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+  margin-top: -450px;
+  line-height: 59px; /* Vertically center the text */
+}
+
+.child:hover {
+  background-color: #84A0BD;
+  color: white;
+}
+
+.child::before, .child::after {
+  content: '';
+  position: absolute;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  border: 1px solid #84A0BD;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.child::before {
+  top: 3px;
+  left: 3px;
+}
+
+.child::after {
+  bottom: 3px;
+  right: 3px;
+}
+
+.child:hover::before, .child:hover::after {
+  opacity: 1;
+}
+
+
+
+
+
+
+
+.content-box {
+  background-color: #DCE6FF47; /* Color for the box */
+  position: relative;
+  z-index: 1; /* Place above the background */
+  padding: 20px; /* Adjust padding as needed */
+  text-align: center; /* Center the content horizontally */
+}
 
 .container {
   display: flex;
@@ -6,78 +104,105 @@
   justify-content: space-around;
 }
 
-.cameraContainer,
-.signUpContainer {
+.googleSignInContainer {
+  height: 25px;
+  width: 365px;
+  align-items: left;
+  text-align: center;
+  position: relative;
+  top: -100px; /* Adjust the value as needed to move the button up */
+  transition: top 0.3s;
+
+  /* Rest of your existing styles */
+}
+
+
+.googleLogo {
+  width: 24px;
+  margin-right: 10px;
+  display: inline-block; /* Display the logo inline with text */
+  left: 0;
+  top: 0;
+}
+
+/* Page transition styles */
+.pageTransition {
+  opacity: 1;
+  transition: opacity 200ms ease-in-out;
+}
+
+.pageTransition-exit {
+  opacity: 1;
+}
+
+.pageTransition-exit-active {
+  opacity: 0;
+  transition: opacity 200ms ease-in-out;
+}
+
+/* Camera container styles */
+.cameraContainer {
   flex: 0 1 45%;
   border: 1px solid #ccc;
   padding: 20px;
   margin: 10px;
-  height:500px;
+  transition: transform 200ms ease-in-out;
+  font-family: "Rowdies-Regular", Helvetica;
+  font-size: 70px;
 }
 
-.welcomeTitle {
-  font-family: 'Rounded Mplus 1c Bold', sans-serif;
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 60px;
-  letter-spacing: 0.1em;
-  text-align: left;
-  color: #05028F;
-  padding: 10px;
-  margin-top: 20px;
+/* Camera transition styles */
+.cameraTransition {
+  transform: translateX(0);
 }
 
-.emailContainer {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  margin-left: 10px;
-}
-
-.emailIcon {
-  font-size: 32px;
-  color: white;
-  background: #05028F;
-  border-radius: 50%;
-  padding: 5px;
-}
-
-.emailText {
-  font-family: Spectral, sans-serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 49px;
-  letter-spacing: 0.1em;
-  text-align: center;
-  color: #05028F;
-  margin-left: 10px;
-}
-
-.emailInputContainer {
-  margin-top: 10px;
-}
-
-.emailInput {
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
+.signUpContainer {
+  flex: 0 1 45%;
+  width: 300px;
+  height:700px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.loginButtonContainer {
+  padding: 20px;
+  margin: 10px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  margin-top: 20px;
+  transition: transform 500ms ease-in-out;
 }
 
+
+/* Welcome title styles */
+.welcomeTitle {
+  font-family: Sarala; /* Updated font family */
+  font-size: 50px; /* Updated font size */
+  font-weight: 400;
+  text-align: center;
+  color: #000; 
+  margin-top: -580px;
+  position: absolute;
+}
+.CameraTitle{
+  font-family: Sarala; /* Updated font family */
+  font-size: 50px; /* Updated font size */
+  font-weight: 400;
+  text-align: center;
+  color: #000; 
+}
+/* Login button styles */
 .loginButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  background: linear-gradient(0deg, #5691CE, #5691CE),
-              linear-gradient(0deg, #A020F0, #A020F0);
-  color: white;
-  cursor: pointer;
+  margin-left: 1px;
+  background-color: #00000021;
+  height: 50px;
+  width: 400px;
+  color: #00000059;
+  padding: 0.5rem 1rem;
+  
+  
+  transition: background-color 500ms ease-in-out;
+  font-family: "Sarala-Regular", Helvetica;
+  margin-top: 120px;
+}
+
+.loginButton:hover {
+  background-color: #2779bd;
 }

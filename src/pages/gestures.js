@@ -1,11 +1,15 @@
-// gesture.js
-
 import React, { useState } from "react";
-import Webcam from "react-webcam";
-import styles from "./gesture.module.css";
+import styles from './gesture.module.css'
+import CameraFeed from './CameraFeed';
+import gif1 from "../assets/gif1.gif"
+import gif2 from "../assets/gif2.gif"
+import gif3 from "../assets/gif3.gif"
+import gif4 from "../assets/gif4.gif"
+import gif5 from "../assets/gif5.gif"
+import gif6 from "../assets/gif6.gif"
 
 function Gestures() {
-  const [selectedOptions, setSelectedOptions] = useState(Array(12).fill("Option 1"));
+  const [selectedOptions, setSelectedOptions] = useState(Array(6).fill("Not Assigned"));
 
   const handleDropdownChange = (index, event) => {
     const updatedOptions = [...selectedOptions];
@@ -13,70 +17,49 @@ function Gestures() {
     setSelectedOptions(updatedOptions);
   };
 
-  // Array of dropdown menu names
-  const dropdownNames = [
-    "Dropdown 1",
-    "Dropdown 2",
-    "Dropdown 3",
-    "Dropdown 4",
-    "Dropdown 5",
-    "Dropdown 6",
-    "Dropdown 7",
-    "Dropdown 8",
-    "Dropdown 9",
-    "Dropdown 10",
-    "Dropdown 11",
-    "Dropdown 12",
-  ];
-
-  // Function to divide the dropdownNames array into rows
-  const chunkArray = (array, chunkSize) => {
-    const chunkedArray = [];
-    for (let i = 0; i < array.length; i += chunkSize) {
-      chunkedArray.push(array.slice(i, i + chunkSize));
-    }
-    return chunkedArray;
-  };
-
-  // Divide the dropdownNames into rows of three
-  const dropdownRows = chunkArray(dropdownNames, 3);
+  const gifs = [gif1, gif2, gif3, gif4, gif5, gif6];
 
   return (
-    <div className={styles.container}>
-      <div className={`${styles.cameraContainer} ${styles.gestureContainer}`}>
-        <h1>Camera Feed</h1>
-        <Webcam
-          audio={false}
-          mirrored={true}
-        />
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
+      <div className="border p-4">
+      <h1 className={`transition-opacity duration-200 ${styles.welcomeTitle} text-4xl mb-4`}> Camera Feed</h1>
+        <CameraFeed />
       </div>
-      <div className={styles.gestureContainer}>
-        <h1>Gestures</h1>
-        {/* Render Dropdowns in Rows */}
-        {dropdownRows.map((row, rowIndex) => (
-          <div key={rowIndex} className={styles.dropdownRow}>
-            {row.map((name, index) => (
-              <div key={index} className={styles.dropdown}>
-                <label htmlFor={`dropdown-${rowIndex}-${index}`}>{name}:</label>
-                <select
-                  id={`dropdown-${rowIndex}-${index}`}
-                  value={selectedOptions[rowIndex * 3 + index]}
-                  onChange={(event) => handleDropdownChange(rowIndex * 3 + index, event)}
-                >
-                  <option value="Option 1">Option 1</option>
-                  <option value="Option 2">Option 2</option>
-                  <option value="Option 3">Option 3</option>
-                  {/* Add more options if needed */}
-                </select>
+      <div className="border p-4" style={{ backgroundColor: '#DCE6FF47' }}>
+        <div class name="right">
+        <h1 className={`transition-opacity duration-200 ${styles.welcomeTitle} text-4xl mb-4`}> Gestures</h1>
+
+        </div>
+      
+
+        {/* Render GIFs in Rows */}
+        <div className="flex flex-wrap">
+          {gifs.map((gif, index) => (
+            <div key={index} className="w-1/3 p-4">
+              {/* Render your gifs here */}
+              <div className={styles.gif}> {/* Apply the updated styles */}
+                <img src={gif} alt={`gif-${index}`} className="w-32 h-32" />
               </div>
-            ))}
-          </div>
-        ))}
-        {/* Add your sign-up form or content here */}
+              {/* Dropdown goes here */}
+              <select
+                value={selectedOptions[index]}
+                onChange={(e) => handleDropdownChange(index, e)}
+                className="mt-2 border p-2 rounded-md"
+              >
+                <option value="Not Assigned">Not Assigned</option>
+                <option value="Single Click">Single Click</option>
+                <option value="Double Click">Double Click</option>
+                <option value="Right Click">Right Click</option>
+                <option value="Scroll Click">Scroll Click</option>
+                <option value="Hover">Hover</option>
+                <option value="Open Keyboard">Open Keyboard</option>
+              </select>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default Gestures;
-

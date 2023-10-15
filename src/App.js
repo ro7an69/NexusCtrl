@@ -1,9 +1,11 @@
-import React from "react";
+import React, { lazy, Suspense, startTransition } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
-import HandWaving from "./pages/gestures"; // Correct the import statement for HandWaving
-import Settings from "./pages/settings"; // Correct the import statement for Settings
+
+// Lazy load your components
+const Home = lazy(() => import("./pages/Home"));
+const Gestures = lazy(() => import("./pages/gestures"));
+const Settings = lazy(() => import("./pages/settings"));
 
 function App() {
   return (
@@ -12,8 +14,22 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/gestures" element={<HandWaving />} /> {/* Correct the element for HandWaving */}
-        <Route path="/settings" element={<Settings />} /> {/* Correct the element for Settings */}
+        <Route
+          path="/gestures"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Gestures />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <Suspense fallback={<div>Loading...</div>}>
+              <Settings />
+            </Suspense>
+          }
+        />
         {/* Add more routes using the <Route> component */}
       </Routes>
     </Router>

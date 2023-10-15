@@ -1,67 +1,106 @@
 /* gesture.module.css */
 
+/* gesture.module.css */
+
+.sarala {
+  font-family: 'sarala-regular', sans-serif;
+  font-size: 40px;
+}
+
+/* Updated styles for the "Gestures" heading */
+.welcomeTitle {
+  font-family: Sarala; /* Updated font family */
+  font-size: 50px; /* Updated font size */
+  font-weight: 400;
+  text-align: center;
+  color: #000; /* Updated text color */
+}
+
 .container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.dropdownRow {
-  display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.dropdown {
-  margin-right: 10px;
-}
-
-.cameraContainer,
-.gestureContainer {
-  flex: 0 1 45%; /* Adjust this percentage to control the width of each box */
-  border: 1px solid #ccc;
   padding: 20px;
-  margin: 10px;
 }
 
-select {
-  background: #AABFFF; /* Background color */
-  color: #333; /* Text color */
-  font-size: 16px; /* Font size */
-  padding: 10px 30px 10px 10px; /* Padding */
-  border: 2px solid #555; /* Border */
-  border-radius: 8px; /* Border radius */
-  -webkit-appearance: none; /* Remove default arrow in Chrome/Safari */
-  -moz-appearance: none; /* Remove default arrow in Firefox */
-  appearance: none; /* Remove default arrow in other browsers */
-  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>"); /* Custom dropdown arrow */
-  background-repeat: no-repeat;
-  background-position: right 10px center;
+/* ... (remaining CSS styles) */
+
+
+.content-box {
+  background-color: #DCE6FF47; /* Color for the box */
+  position: relative;
+  z-index: 1; /* Place above the background */
+  padding: 20px; /* Adjust padding as needed */
+  text-align: center; /* Center the content horizontally */
 }
 
-.gestureContainer h1 {
+.pageTransition {
+  transition: opacity 3s ease-out;
+  opacity: 1;
+}
+
+.pageTransition-exit {
+  opacity: 1;
+}
+
+.pageTransition-exit-active {
+  opacity: 0;
+  transition: opacity 3s ease-in-out;
+}
+
+.sectionTitle {
   font-family: "Rounded Mplus 1c Bold", sans-serif;
-  font-size: 55px;
+  font-size: 36px;
   font-weight: 700;
-  line-height: 82px;
-  letter-spacing: 0.1em;
-  text-align: center;
-  color: #05028F; /* Text color */
+  color: #05028F;
+  margin-bottom: 20px;
 }
 
-/* Additional styles for better spacing */
+.gif {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba(214, 224, 255, 0.28); /* Transparent background color */
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25)); /* Drop shadow */
+  padding: 8px; /* Add padding for spacing around the GIF */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Updated styles for the select element with default arrow */
+select {
+  display: inline-flex;
+  height: 42px;
+  padding: 6px 38px 0px 14px;
+  align-items: center;
+  gap: 32px;
+  flex-shrink: 0;
+  background: #F6F9FF;
+  box-shadow: 5px 5px 4px 0px rgba(0, 0, 0, 0.25);
+  appearance: none; /* Remove default arrow */
+  background-position: right 10px center;
+  width: 200px; /* Adjust width as needed */
+  font-size: 16px; /* Adjust font size as needed */
+  font-family: "Sarala-Regular", Helvetica; /* Adjust font family as needed */
+  border: 2px solid #555;
+  border-radius: 8px;
+  padding-right: 38px; /* Adjust the right padding to accommodate the default arrow */
+  cursor: pointer;
+  /* Add default arrow */
+  background-image: linear-gradient(45deg, transparent 50%, #000 50%),
+    linear-gradient(135deg, #000 50%, transparent 50%);
+  background-position: calc(100% - 12px) center, calc(100% - 7px) center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
 @media (max-width: 600px) {
-  .gestureContainer {
-    width: 100%;
+  .dropdown {
+    flex-basis: 100%;
   }
 
-  .cameraContainer,
-  .gestureContainer {
-    padding: 5px;
-  }
-
-  select {
-    font-size: 14px;
-    padding: 8px 26px 8px 8px;
-  }
+  
 }
