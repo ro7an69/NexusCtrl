@@ -45,7 +45,7 @@ deadzone_bottom = 1
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
-
+    
 while True:
     # Read each frame from the webcam
     _, frame = cap.read()
@@ -100,8 +100,6 @@ while True:
             base_y = (handLandmarks[5][1] + handLandmarks[9][1] + handLandmarks[13][1] + handLandmarks[17][1]) / 4
             centroid_x = (base_x + handLandmarks[0][0]) / 2
             centroid_y = (base_y + handLandmarks[0][1]) / 2
-            print(hand_y)
-            print(centroid_y)
             if centroid_y < deadzone_top:
                 if handLabel == "Left":
                     if handLandmarks[4][0] > handLandmarks[3][0]:  # Check for left thumb
