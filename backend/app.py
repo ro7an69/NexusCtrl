@@ -45,7 +45,38 @@ deadzone_bottom = 1
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
+
+def move_cursor(cursor_x, cursor_y):
+    global smoothed_cursor_x, smoothed_cursor_y
+    smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
+    smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
+    pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
+
+def click():
+    pyautogui.click()
+    time.sleep(delay_time)
+
+def press_left():
+    pyautogui.press('left')
+    time.sleep(delay_time)
+
+def right_click():
+    pyautogui.rightClick()
+    time.sleep(delay_time)
+
+def double_click():
+    pyautogui.doubleClick()
+    time.sleep(delay_time)
+
+def middle_click():
+    pyautogui.middleClick()
+    time.sleep(delay_time)
+
+def open_osk():
+    subprocess.Popen('osk.exe', shell=True)
+    time.sleep(delay_time)
     
+
 while True:
     # Read each frame from the webcam
     _, frame = cap.read()
@@ -130,27 +161,20 @@ while True:
                 smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
                 smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
 
-                # Move the cursor to the calculated position
                 if fingerCount == 1 and "Index" in fingersUp:
-                    pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
-                if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    pyautogui.click()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
-                    pyautogui.press('left')
-                    time.sleep(delay_time)
-                if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    pyautogui.rightClick()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    pyautogui.doubleClick()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                    pyautogui.middleClick()
-                    time.sleep(delay_time)
-                if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                    subprocess.Popen('osk.exe', shell=True)
-                    time.sleep(delay_time)
+                    move_cursor(smoothed_cursor_x, smoothed_cursor_y)
+                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
+                    click()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
+                    press_left()
+                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
+                    right_click()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
+                    double_click()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
+                    middle_click()
+                elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
+                    open_osk()
 
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
