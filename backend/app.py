@@ -6,9 +6,9 @@ import os
 from tensorflow.keras.models import load_model
 import subprocess
 import time
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
+
 # Initialize mediapipe
 mpHands = mp.solutions.hands
 hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
@@ -26,8 +26,8 @@ model = load_model(model_dir)
 # Load class names
 with open(names_file, 'r') as f:
     classNames = f.read().split('\n')
-
 print(classNames)
+
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
 width = 1920
@@ -45,7 +45,55 @@ deadzone_bottom = 1
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
-    
+
+def move_cursor(cursor_x, cursor_y):
+    global smoothed_cursor_x, smoothed_cursor_y
+    smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
+    smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
+    pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
+
+def click():
+    pyautogui.click()
+    time.sleep(delay_time)
+
+def press_left():
+    pyautogui.press('left')
+    time.sleep(delay_time)
+
+def right_click():
+    pyautogui.rightClick()
+    time.sleep(delay_time)
+
+def double_click():
+    pyautogui.doubleClick()
+    time.sleep(delay_time)
+
+def middle_click():
+    pyautogui.middleClick()
+    time.sleep(delay_time)
+
+def open_osk():
+    subprocess.Popen('osk.exe', shell=True)
+    time.sleep(delay_time)
+
+def null_function():
+    pass
+
+# Read the configuration file
+config_file_path = os.path.join(script_dir, 'conf.txt')
+functions = []
+
+with open(config_file_path, 'r') as config_file:
+    functions = config_file.read().split('\n')
+
+# Assign null_function to any remaining functions
+functions += ['null_function'] * (15 - len(functions))
+
+# Dynamically create functions in the global namespace
+for i, func_name in enumerate(functions, start=1):
+    globals()[f'function{i}'] = globals().get(func_name, null_function)
+#alsd
+
 while True:
     # Read each frame from the webcam
     _, frame = cap.read()
@@ -66,7 +114,6 @@ while True:
     deadzone_bottom_pixel = int(deadzone_bottom * height)
     cv2.line(frame, (0, deadzone_top_pixel), (width, deadzone_top_pixel), (0, 255, 0), 2)
     cv2.line(frame, (0, deadzone_bottom_pixel), (width, deadzone_bottom_pixel), (0, 255, 0), 2)
-
     # post-process the result
     if result.multi_hand_landmarks:
         landmarks = []
@@ -127,30 +174,22 @@ while True:
                 screen_width, screen_height = pyautogui.size()
                 cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
                 cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
-                smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
-                smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
 
                 # Move the cursor to the calculated position
                 if fingerCount == 1 and "Index" in fingersUp:
-                    pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
-                if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    pyautogui.click()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
-                    pyautogui.press('left')
-                    time.sleep(delay_time)
-                if fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    pyautogui.rightClick()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    pyautogui.doubleClick()
-                    time.sleep(delay_time)
-                if fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                    pyautogui.middleClick()
-                    time.sleep(delay_time)
-                if fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                    subprocess.Popen('osk.exe', shell=True)
-                    time.sleep(delay_time)
+                    function1()
+                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
+                    function2()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
+                    function3()
+                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
+                    function4()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
+                    function5()
+                elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
+                    function6()
+                elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
+                    function7()
 
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
