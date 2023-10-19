@@ -175,7 +175,6 @@ while True:
                 cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
                 cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
 
-                # Move the cursor to the calculated position
                 if fingerCount == 1 and "Index" in fingersUp:
                     function1()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
