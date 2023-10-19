@@ -6,6 +6,8 @@ import os
 from tensorflow.keras.models import load_model
 import subprocess
 import time
+from functools import partial
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
 
@@ -32,22 +34,18 @@ print(classNames)
 cap = cv2.VideoCapture(0)
 width = 1920
 height = 1080
-scaling_factor = 2.0
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-smoothed_cursor_x = 0
-smoothed_cursor_y = 0
-smoothing_factor = 0.5
-delay_time = 2
-
-deadzone_top = 0.5
-deadzone_bottom = 1
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
 
 def move_cursor(cursor_x, cursor_y):
     global smoothed_cursor_x, smoothed_cursor_y
+    index_finger_x, index_finger_y = handLandmarks[8]
+    screen_width, screen_height = pyautogui.size()
+    cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
+    cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
     smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
     smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
     pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
@@ -81,18 +79,39 @@ def null_function():
 
 # Read the configuration file
 config_file_path = os.path.join(script_dir, 'conf.txt')
-functions = []
-
 with open(config_file_path, 'r') as config_file:
-    functions = config_file.read().split('\n')
+    lines = config_file.read().split('\n')
 
-# Assign null_function to any remaining functions
-functions += ['null_function'] * (15 - len(functions))
+# Skip the first line (username)
+username = lines[0]
 
-# Dynamically create functions in the global namespace
-for i, func_name in enumerate(functions, start=1):
-    globals()[f'function{i}'] = globals().get(func_name, null_function)
-#alsd
+# Assign the other configuration values
+scaling_factor = float(lines[1])
+deadzone_top = float(lines[2])
+deadzone_bottom = float(lines[3])
+smoothing_factor = float(lines[4])
+delay_time = int(lines[5])
+
+move_cursor_args = (0, 0)
+function = [None] * len(lines)
+for i, line in enumerate(lines[6:]):
+    line = line.strip()
+    if line == '0':
+        function[i] = partial(move_cursor, *move_cursor_args)
+    elif line == '1':
+        function[i] = click
+    elif line == '2':
+        function[i] = press_left
+    elif line == '3':
+        function[i] = right_click
+    elif line == '4':
+        function[i] = double_click
+    elif line == '5':
+        function[i] = middle_click
+    elif line == '6':
+        function[i] = open_osk
+    else:
+        function[i] = null_function
 
 while True:
     # Read each frame from the webcam
@@ -169,26 +188,20 @@ while True:
                     fingerCount += 1
                     fingersUp.append("Pinky")
                     
-                
-                index_finger_x, index_finger_y = handLandmarks[8]
-                screen_width, screen_height = pyautogui.size()
-                cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
-                cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
-
                 if fingerCount == 1 and "Index" in fingersUp:
-                    function1()
+                    function[0]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    function2()
+                    function[1]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
-                    function3()
+                    function[2]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    function4()
+                    function[3]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    function5()
+                    function[4]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                    function6()
+                    function[5]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                    function7()
+                    function[6]()
 
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
