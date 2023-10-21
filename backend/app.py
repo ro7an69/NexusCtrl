@@ -32,16 +32,34 @@ print(classNames)
 
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
+global width, height, screen_height, screen_width
 width = 1920
 height = 1080
+dimension_changed = False
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
 
+def move_window(width, height):
+    cv2.moveWindow("Output", screen_width - width, screen_height - height)
+
+def restart_capture(new_width, new_height):
+    global cap, width, height, dimension_changed
+    if cap is not None:
+        cap.release()  # Release the current capture
+    # Create a new capture with the updated dimensions
+    cap = cv2.VideoCapture(0)
+    width = new_width
+    height = new_height
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+    dimension_changed = True
+    
 def move_cursor(cursor_x, cursor_y):
-    global smoothed_cursor_x, smoothed_cursor_y
+    smoothed_cursor_x = 0
+    smoothed_cursor_y = 0
     index_finger_x, index_finger_y = handLandmarks[8]
     screen_width, screen_height = pyautogui.size()
     cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
@@ -73,6 +91,9 @@ def middle_click():
 def open_osk():
     subprocess.Popen('osk.exe', shell=True)
     time.sleep(delay_time)
+
+def resize_window(new_width, new_height):
+    restart_capture(new_width, new_height)
 
 def null_function():
     pass
@@ -115,7 +136,9 @@ for i, line in enumerate(lines[6:]):
 
 while True:
     # Read each frame from the webcam
-    _, frame = cap.read()
+    ret, frame = cap.read()
+    if not ret:
+        break
     x, y, c = frame.shape
     # Flip the frame vertically
     frame = cv2.flip(frame, 1)
@@ -191,18 +214,29 @@ while True:
                 if fingerCount == 1 and "Index" in fingersUp:
                     function[0]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    function[1]()
+                    resize_window(1280, 720)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[2]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
                     function[3]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    function[4]()
+                    move_window(width, height)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
                     function[5]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
                     function[6]()
-
+                    
+    if dimension_changed:
+        # Calculate the center of the frame
+        center_x = x // 2
+        center_y = y // 2
+        # Calculate the cropping boundaries to capture the center portion
+        crop_x1 = center_x - (width // 2)
+        crop_x2 = center_x + (width // 2)
+        crop_y1 = center_y - (height // 2)
+        crop_y2 = center_y + (height // 2)
+        dimension_changed = False  # Reset the dimension change flag
+        
     # show the prediction on the frame
     cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     # Show the final output
