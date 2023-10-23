@@ -73,6 +73,33 @@ def move_cursor():
 
     pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
 
+prev_index_finger_x = 0
+prev_index_finger_y = 0
+speed_factor = 3000
+
+# Function to move the cursor based on the index finger movement
+def move_cursor2():
+    global prev_index_finger_x, prev_index_finger_y
+    index_finger_x, index_finger_y = handLandmarks[8]
+    if prev_index_finger_x != 0 and prev_index_finger_y != 0:
+        # Get the current index finger coordinates
+        index_finger_x, index_finger_y = handLandmarks[8]
+        
+        cursor_x, cursor_y = pyautogui.position()
+        # Calculate the movement delta
+        delta_x = (index_finger_x - prev_index_finger_x) * speed_factor
+        delta_y = (index_finger_y - prev_index_finger_y) * speed_factor
+        
+        # Calculate the new cursor position
+        new_cursor_x = cursor_x + delta_x
+        new_cursor_y = cursor_y + delta_y
+        
+        # Move the cursor
+        pyautogui.moveTo(new_cursor_x, new_cursor_y)
+    
+    # Update the previous index finger position
+    prev_index_finger_x = index_finger_x
+    prev_index_finger_y = index_finger_y
 
 def click():
     pyautogui.click()
@@ -215,10 +242,12 @@ while True:
     handLandmarks = []
     fingersUp = []
     
+    # Deadzone lines
     deadzone_top_pixel = int(deadzone_top * height)
     deadzone_bottom_pixel = int(deadzone_bottom * height)
     cv2.line(frame, (0, deadzone_top_pixel), (width, deadzone_top_pixel), (0, 255, 0), 2)
     cv2.line(frame, (0, deadzone_bottom_pixel), (width, deadzone_bottom_pixel), (0, 255, 0), 2)
+    
     # post-process the result
     if result.multi_hand_landmarks:
         landmarks = []
@@ -275,16 +304,15 @@ while True:
                     fingersUp.append("Pinky")
                     
                 if fingerCount == 1 and "Index" in fingersUp:
-                    move_cursor()
+                    move_cursor2()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    perform_action_with_delay(click, 2)
-
+                    open_osk_with_size(800, 400)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[14]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
                     function[14]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    function[14]()
+                    open_osk_with_size(1600, 800)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
                     function[14]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
