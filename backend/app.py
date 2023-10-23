@@ -44,8 +44,8 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
 
-def move_window(width, height):
-    cv2.moveWindow("Output", screen_width - width, screen_height - height)
+def move_window(window_name, width, height):
+    cv2.moveWindow(window_name, screen_width - width, screen_height - height)
 
 def restart_capture(new_width, new_height):
     global cap, width, height, dimension_changed
@@ -104,9 +104,6 @@ def open_osk_with_size(width, height):
     
     window = window[0]  # Get the first window with the specified title
     window.resizeTo(width, height)
-
-import pygetwindow as gw
-import time
 
 # Function to close the active window
 def close_active_window():
