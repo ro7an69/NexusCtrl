@@ -304,15 +304,15 @@ while True:
                     fingersUp.append("Pinky")
                     
                 if fingerCount == 1 and "Index" in fingersUp:
-                    move_cursor2()
+                    function[14]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    open_osk_with_size(800, 400)
+                    function[14]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[14]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
                     function[14]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    open_osk_with_size(1600, 800)
+                    restart_capture(800, 800)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
                     function[14]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
