@@ -7,6 +7,8 @@ from tensorflow.keras.models import load_model
 import subprocess
 import time
 from functools import partial
+import pygetwindow as gw
+
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
@@ -92,8 +94,31 @@ def open_osk():
     subprocess.Popen('osk.exe', shell=True)
     time.sleep(delay_time)
 
-def resize_window(new_width, new_height):
-    restart_capture(new_width, new_height)
+def open_osk_with_size(width, height):
+    open_osk()
+    window = gw.getWindowsWithTitle("On-Screen Keyboard")
+    
+    if len(window) == 0:
+        print(f"Window with title osk not found.")
+        return
+    
+    window = window[0]  # Get the first window with the specified title
+    window.resizeTo(width, height)
+
+import pygetwindow as gw
+import time
+
+# Function to close the active window
+def close_active_window():
+    active_window = gw.getActiveWindow()
+    if active_window:
+        active_window.close()
+
+# Function to minimize the active window
+def minimize_active_window():
+    active_window = gw.getActiveWindow()
+    if active_window:
+        active_window.minimize()
 
 def null_function():
     pass
@@ -214,13 +239,13 @@ while True:
                 if fingerCount == 1 and "Index" in fingersUp:
                     function[0]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    resize_window(1280, 720)
+                    open_osk_with_size(500,200)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[2]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    function[3]()
+                    minimize_active_window()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    move_window(width, height)
+                    open_osk_with_size(1000,400)
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
                     function[5]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
