@@ -8,7 +8,7 @@ import subprocess
 import time
 from functools import partial
 import pygetwindow as gw
-
+import threading
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
@@ -34,9 +34,11 @@ print(classNames)
 
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
-global width, height, screen_height, screen_width
+global width, height, screen_height, screen_width, smoothed_cursor_x, smoothed_cursor_y
 width = 1920
 height = 1080
+smoothed_cursor_x = 0
+smoothed_cursor_y = 0
 dimension_changed = False
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
@@ -59,25 +61,38 @@ def restart_capture(new_width, new_height):
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     dimension_changed = True
     
-def move_cursor(cursor_x, cursor_y):
-    smoothed_cursor_x = 0
-    smoothed_cursor_y = 0
+def move_cursor():
+    global smoothed_cursor_x, smoothed_cursor_y
+
     index_finger_x, index_finger_y = handLandmarks[8]
     screen_width, screen_height = pyautogui.size()
-    cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
-    cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
-    smoothed_cursor_x = (1 - smoothing_factor) * smoothed_cursor_x + smoothing_factor * cursor_x
-    smoothed_cursor_y = (1 - smoothing_factor) * smoothed_cursor_y + smoothing_factor * cursor_y
+    target_cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
+    target_cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
+    smoothed_cursor_x = smoothing_factor * target_cursor_x + (1 - smoothing_factor) * smoothed_cursor_x
+    smoothed_cursor_y = smoothing_factor * target_cursor_y + (1 - smoothing_factor) * smoothed_cursor_y
+
     pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
+
 
 def click():
     pyautogui.click()
-    time.sleep(delay_time)
 
 def press_left():
     pyautogui.press('left')
     time.sleep(delay_time)
 
+def press_up():
+    pyautogui.press('up')
+    time.sleep(delay_time)
+
+def press_down():
+    pyautogui.press('down')
+    time.sleep(delay_time)
+
+def press_right():
+    pyautogui.press('right')
+    time.sleep(delay_time)
+    
 def right_click():
     pyautogui.rightClick()
     time.sleep(delay_time)
@@ -117,8 +132,34 @@ def minimize_active_window():
     if active_window:
         active_window.minimize()
 
+def media_play_pause():
+    pyautogui.press('playpause')
+    time.sleep(delay_time)
+
+def media_next_track():
+    pyautogui.press('nexttrack')
+    time.sleep(delay_time)
+
+def media_previous_track():
+    pyautogui.press('prevtrack')
+    time.sleep(delay_time)
+
+def increase_volume():
+    pyautogui.press('volumeup')
+
+def decrease_volume():
+    pyautogui.press('volumedown')
+    
 def null_function():
     pass
+
+def perform_action_with_delay(action, delay_time):
+    def delayed_action():
+        action()
+    
+    # Create a timer with the specified delay and start it
+    timer = threading.Timer(delay_time, delayed_action)
+    timer.start()
 
 # Read the configuration file
 config_file_path = os.path.join(script_dir, 'conf.txt')
@@ -234,19 +275,20 @@ while True:
                     fingersUp.append("Pinky")
                     
                 if fingerCount == 1 and "Index" in fingersUp:
-                    function[0]()
+                    move_cursor()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    open_osk_with_size(500,200)
+                    perform_action_with_delay(click, 2)
+
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
-                    function[2]()
+                    function[14]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    minimize_active_window()
+                    function[14]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    open_osk_with_size(1000,400)
+                    function[14]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                    function[5]()
+                    function[14]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                    function[6]()
+                    function[14]()
                     
     if dimension_changed:
         # Calculate the center of the frame
