@@ -45,7 +45,7 @@ scaling_factor = float(lines[2])
 deadzone_top = float(lines[3])
 deadzone_bottom = float(lines[4])
 smoothing_factor = float(lines[5])
-delay_time = int(lines[6])
+delay_time = float(lines[6])
 speed_factor = int(lines[7])
 keyboard_size = lines[8]
 
@@ -119,6 +119,7 @@ def move_cursor2():
 
 def click():
     pyautogui.click()
+    time.sleep(delay_time)
 
 def press_left():
     pyautogui.press('left')
@@ -338,9 +339,9 @@ while True:
                     
                 if fingerCount == 1 and "Index" in fingersUp:
                     function[0]()
-                    """
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    function[19]()
+                    click()
+                    """
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[19]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):

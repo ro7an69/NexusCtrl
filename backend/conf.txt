@@ -4,7 +4,7 @@ Values:
 1
 1
 0.5
-2
+0.5
 3000
 small
 Functions:
