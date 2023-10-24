@@ -32,6 +32,23 @@ with open(names_file, 'r') as f:
     classNames = f.read().split('\n')
 print(classNames)
 
+# Read the configuration file
+config_file_path = os.path.join(script_dir, 'conf.txt')
+with open(config_file_path, 'r') as config_file:
+    lines = config_file.read().split('\n')
+
+# Skip the first line (username)
+username = lines[0]
+
+# Assign the other configuration values
+scaling_factor = float(lines[2])
+deadzone_top = float(lines[3])
+deadzone_bottom = float(lines[4])
+smoothing_factor = float(lines[5])
+delay_time = int(lines[6])
+speed_factor = int(lines[7])
+keyboard_size = lines[8]
+
 # Initialize the webcam
 cap = cv2.VideoCapture(0)
 global width, height, screen_height, screen_width, smoothed_cursor_x, smoothed_cursor_y
@@ -75,7 +92,6 @@ def move_cursor():
 
 prev_index_finger_x = 0
 prev_index_finger_y = 0
-speed_factor = 3000
 
 # Function to move the cursor based on the index finger movement
 def move_cursor2():
@@ -136,7 +152,16 @@ def open_osk():
     subprocess.Popen('osk.exe', shell=True)
     time.sleep(delay_time)
 
-def open_osk_with_size(width, height):
+def open_osk_with_size():
+    if keyboard_size == 'small':
+        keyboard_width = 800
+        keyboard_height = 400
+    elif keyboard_size == 'medium':
+        keyboard_width = 1200
+        keyboard_height = 600
+    elif keyboard_size == 'large':
+        keyboard_width = 1920
+        keyboard_height = 800
     open_osk()
     window = gw.getWindowsWithTitle("On-Screen Keyboard")
     
@@ -145,7 +170,7 @@ def open_osk_with_size(width, height):
         return
     
     window = window[0]  # Get the first window with the specified title
-    window.resizeTo(width, height)
+    window.resizeTo(keyboard_width, keyboard_height)
 
 # Function to close the active window
 def close_active_window():
@@ -188,39 +213,47 @@ def perform_action_with_delay(action, delay_time):
     timer = threading.Timer(delay_time, delayed_action)
     timer.start()
 
-# Read the configuration file
-config_file_path = os.path.join(script_dir, 'conf.txt')
-with open(config_file_path, 'r') as config_file:
-    lines = config_file.read().split('\n')
-
-# Skip the first line (username)
-username = lines[0]
-
-# Assign the other configuration values
-scaling_factor = float(lines[1])
-deadzone_top = float(lines[2])
-deadzone_bottom = float(lines[3])
-smoothing_factor = float(lines[4])
-delay_time = int(lines[5])
-
-move_cursor_args = (0, 0)
 function = [None] * len(lines)
-for i, line in enumerate(lines[6:]):
+for i, line in enumerate(lines[10:]):
     line = line.strip()
-    if line == '0':
-        function[i] = partial(move_cursor, *move_cursor_args)
-    elif line == '1':
+    if line == 'move_cursor':
+        function[i] = move_cursor
+    elif line == 'ham':
+        function[i] = move_cursor2
+    elif line == 'click':
         function[i] = click
-    elif line == '2':
+    elif line == 'press_left':
         function[i] = press_left
-    elif line == '3':
+    elif line == 'press_up':
+        function[i] = press_up
+    elif line == 'press_down':
+        function[i] = press_down
+    elif line == 'press_right':
+        function[i] = press_right
+    elif line == 'right_click':
         function[i] = right_click
-    elif line == '4':
+    elif line == 'double_click':
         function[i] = double_click
-    elif line == '5':
+    elif line == 'middle_click':
         function[i] = middle_click
-    elif line == '6':
+    elif line == 'open_osk':
         function[i] = open_osk
+    elif line == 'open_osk_with_size':
+        function[i] = open_osk_with_size
+    elif line == 'close_active_window':
+        function[i] = close_active_window
+    elif line == 'minimize_active_window':
+        function[i] = minimize_active_window
+    elif line == 'media_play_pause':
+        function[i] = media_play_pause
+    elif line == 'media_next_track':
+        function[i] = media_next_track
+    elif line == 'media_previous_track':
+        function[i] = media_previous_track
+    elif line == 'increase_volume':
+        function[i] = increase_volume
+    elif line == 'decrease_volume':
+        function[i] = decrease_volume
     else:
         function[i] = null_function
 
@@ -304,20 +337,21 @@ while True:
                     fingersUp.append("Pinky")
                     
                 if fingerCount == 1 and "Index" in fingersUp:
-                    function[14]()
+                    function[0]()
+                    """
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    function[14]()
+                    function[19]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
-                    function[14]()
+                    function[19]()
                 elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Pinky"]):
-                    function[14]()
+                    function[19]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Pinky"]):
-                    restart_capture(800, 800)
+                    function[19]()
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Ring"]):
-                    function[14]()
+                    function[19]()
                 elif fingerCount == 3 and all(finger in fingersUp for finger in ["Index", "Ring", "Pinky"]):
-                    function[14]()
-                    
+                    function[19]()
+                    """
     if dimension_changed:
         # Calculate the center of the frame
         center_x = x // 2
