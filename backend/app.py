@@ -9,6 +9,12 @@ import time
 from functools import partial
 import pygetwindow as gw
 import threading
+from flask import Flask, render_template, jsonify
+
+
+app = Flask(__name__)
+if __name__ == '__main__':
+    app.run(debug=True)
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 pyautogui.FAILSAFE = False
@@ -63,8 +69,10 @@ cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 # Get the screen width and height
 screen_width, screen_height = pyautogui.size()
 
+
 def move_window(window_name, width, height):
     cv2.moveWindow(window_name, screen_width - width, screen_height - height)
+
 
 def restart_capture(new_width, new_height):
     global cap, width, height, dimension_changed
@@ -77,81 +85,93 @@ def restart_capture(new_width, new_height):
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     dimension_changed = True
-    
+
+
 def move_cursor():
     global smoothed_cursor_x, smoothed_cursor_y
 
     index_finger_x, index_finger_y = handLandmarks[8]
     screen_width, screen_height = pyautogui.size()
-    target_cursor_x = int((index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
-    target_cursor_y = int((index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
-    smoothed_cursor_x = smoothing_factor * target_cursor_x + (1 - smoothing_factor) * smoothed_cursor_x
-    smoothed_cursor_y = smoothing_factor * target_cursor_y + (1 - smoothing_factor) * smoothed_cursor_y
+    target_cursor_x = int(
+        (index_finger_x * screen_width * scaling_factor) - (screen_width / 2))
+    target_cursor_y = int(
+        (index_finger_y * screen_height * scaling_factor) - (screen_height / 2))
+    smoothed_cursor_x = smoothing_factor * target_cursor_x + \
+        (1 - smoothing_factor) * smoothed_cursor_x
+    smoothed_cursor_y = smoothing_factor * target_cursor_y + \
+        (1 - smoothing_factor) * smoothed_cursor_y
 
     pyautogui.moveTo(smoothed_cursor_x, smoothed_cursor_y)
 
-prev_index_finger_x = 0
-prev_index_finger_y = 0
 
-# Function to move the cursor based on the index finger movement
+prev_index_finger_x = screen_width // 2
+prev_index_finger_y = screen_height // 2
+cursor_mode = "read"  # Initialize the cursor mode
+
+
 def move_cursor2():
     global prev_index_finger_x, prev_index_finger_y
+    prev_index_finger_x, prev_index_finger_y = handLandmarks[8]
+    print(prev_index_finger_x, prev_index_finger_y)
+    time.sleep(0.2)
     index_finger_x, index_finger_y = handLandmarks[8]
-    if prev_index_finger_x != 0 and prev_index_finger_y != 0:
-        # Get the current index finger coordinates
-        index_finger_x, index_finger_y = handLandmarks[8]
-        
-        cursor_x, cursor_y = pyautogui.position()
-        # Calculate the movement delta
-        delta_x = (index_finger_x - prev_index_finger_x) * speed_factor
-        delta_y = (index_finger_y - prev_index_finger_y) * speed_factor
-        
-        # Calculate the new cursor position
-        new_cursor_x = cursor_x + delta_x
-        new_cursor_y = cursor_y + delta_y
-        
-        # Move the cursor
-        pyautogui.moveTo(new_cursor_x, new_cursor_y)
-    
-    # Update the previous index finger position
-    prev_index_finger_x = index_finger_x
-    prev_index_finger_y = index_finger_y
+    print(index_finger_x, index_finger_y)
+    # Calculate the movement delta
+    delta_x = (index_finger_x - prev_index_finger_x) * speed_factor
+    delta_y = (index_finger_y - prev_index_finger_y) * speed_factor
+    print(delta_x, delta_y)
+    cursor_x, cursor_y = pyautogui.position()
+    new_cursor_x = cursor_x + delta_x
+    new_cursor_y = cursor_y + delta_y
+    print(new_cursor_x, new_cursor_y)
+    # Move the cursor
+    pyautogui.moveTo(new_cursor_x, new_cursor_y)
+
 
 def click():
     pyautogui.click()
     time.sleep(delay_time)
 
+
 def press_left():
     pyautogui.press('left')
     time.sleep(delay_time)
+
 
 def press_up():
     pyautogui.press('up')
     time.sleep(delay_time)
 
+
 def press_down():
     pyautogui.press('down')
     time.sleep(delay_time)
 
+
 def press_right():
     pyautogui.press('right')
     time.sleep(delay_time)
-    
+
+
 def right_click():
     pyautogui.rightClick()
     time.sleep(delay_time)
+
 
 def double_click():
     pyautogui.doubleClick()
     time.sleep(delay_time)
 
+
 def middle_click():
     pyautogui.middleClick()
     time.sleep(delay_time)
 
+
 def open_osk():
     subprocess.Popen('osk.exe', shell=True)
     time.sleep(delay_time)
+
 
 def open_osk_with_size():
     if keyboard_size == 'small':
@@ -165,54 +185,66 @@ def open_osk_with_size():
         keyboard_height = 800
     open_osk()
     window = gw.getWindowsWithTitle("On-Screen Keyboard")
-    
+
     if len(window) == 0:
         print(f"Window with title osk not found.")
         return
-    
+
     window = window[0]  # Get the first window with the specified title
     window.resizeTo(keyboard_width, keyboard_height)
 
 # Function to close the active window
+
+
 def close_active_window():
     active_window = gw.getActiveWindow()
     if active_window:
         active_window.close()
 
 # Function to minimize the active window
+
+
 def minimize_active_window():
     active_window = gw.getActiveWindow()
     if active_window:
         active_window.minimize()
 
+
 def media_play_pause():
     pyautogui.press('playpause')
     time.sleep(delay_time)
+
 
 def media_next_track():
     pyautogui.press('nexttrack')
     time.sleep(delay_time)
 
+
 def media_previous_track():
     pyautogui.press('prevtrack')
     time.sleep(delay_time)
 
+
 def increase_volume():
     pyautogui.press('volumeup')
 
+
 def decrease_volume():
     pyautogui.press('volumedown')
-    
+
+
 def null_function():
     pass
+
 
 def perform_action_with_delay(action, delay_time):
     def delayed_action():
         action()
-    
+
     # Create a timer with the specified delay and start it
     timer = threading.Timer(delay_time, delayed_action)
     timer.start()
+
 
 function = [None] * len(lines)
 for i, line in enumerate(lines[10:]):
@@ -268,20 +300,21 @@ while True:
     frame = cv2.flip(frame, 1)
     framergb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    # Get hand landmark prediction
     result = hands.process(framergb)
 
     fingerCount = 0
     className = ''
     handLandmarks = []
     fingersUp = []
-    
+
     # Deadzone lines
     deadzone_top_pixel = int(deadzone_top * height)
     deadzone_bottom_pixel = int(deadzone_bottom * height)
-    cv2.line(frame, (0, deadzone_top_pixel), (width, deadzone_top_pixel), (0, 255, 0), 2)
-    cv2.line(frame, (0, deadzone_bottom_pixel), (width, deadzone_bottom_pixel), (0, 255, 0), 2)
-    
+    cv2.line(frame, (0, deadzone_top_pixel),
+             (width, deadzone_top_pixel), (0, 255, 0), 2)
+    cv2.line(frame, (0, deadzone_bottom_pixel),
+             (width, deadzone_bottom_pixel), (0, 255, 0), 2)
+
     # post-process the result
     if result.multi_hand_landmarks:
         landmarks = []
@@ -310,9 +343,12 @@ while True:
 
 # Other fingers: TIP y position must be lower than PIP y position,
 # as image origin is in the upper left corner.
-            hand_y = handLandmarks[0][1]  # Assuming the first landmark is the top of the hand
-            base_x = (handLandmarks[5][0] + handLandmarks[9][0] + handLandmarks[13][0] + handLandmarks[17][0]) / 4
-            base_y = (handLandmarks[5][1] + handLandmarks[9][1] + handLandmarks[13][1] + handLandmarks[17][1]) / 4
+            # Assuming the first landmark is the top of the hand
+            hand_y = handLandmarks[0][1]
+            base_x = (handLandmarks[5][0] + handLandmarks[9][0] +
+                      handLandmarks[13][0] + handLandmarks[17][0]) / 4
+            base_y = (handLandmarks[5][1] + handLandmarks[9][1] +
+                      handLandmarks[13][1] + handLandmarks[17][1]) / 4
             centroid_x = (base_x + handLandmarks[0][0]) / 2
             centroid_y = (base_y + handLandmarks[0][1]) / 2
             if centroid_y < deadzone_top:
@@ -336,11 +372,11 @@ while True:
                 if handLandmarks[20][1] < handLandmarks[18][1]:  # Pinky
                     fingerCount += 1
                     fingersUp.append("Pinky")
-                    
+
                 if fingerCount == 1 and "Index" in fingersUp:
-                    function[0]()
-                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className=='peace':
-                    click()
+                    print("jewce")
+                elif fingerCount == 2 and all(finger in fingersUp for finger in ["Index", "Middle"]) or className == 'peace':
+                    print("balls")
                     """
                 elif fingerCount == 1 and all(finger in fingersUp for finger in ["Right Thumb"]) or className=='thumbs up':
                     function[19]()
@@ -363,13 +399,28 @@ while True:
         crop_y1 = center_y - (height // 2)
         crop_y2 = center_y + (height // 2)
         dimension_changed = False  # Reset the dimension change flag
-        
+
     # show the prediction on the frame
-    cv2.putText(frame, str(fingerCount) + str(fingersUp) + className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+    cv2.putText(frame, str(fingerCount) + str(fingersUp) + className,
+                (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
     # Show the final output
     cv2.imshow("Output", frame)
     if cv2.waitKey(1) == ord('q'):
         break
+
+# Serve your ReactJS frontend (assuming you've built it)
+
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+@app.route('/send_data')
+def send_data():
+    data = "Hello from the server!"
+    return jsonify(data=data)
+
 
 # release the webcam and destroy all active windows
 cap.release()
