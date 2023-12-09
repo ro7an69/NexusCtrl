@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Gestures from "./pages/gestures";
 import Settings from "./pages/setting";
 import socketIOClient from 'socket.io-client';
+import { UserProvider } from "./components/auth/UserContext";
 
 function App() {
   const [showHome, setShowHome] = useState(true);
@@ -36,13 +37,8 @@ function App() {
   useEffect(() => {
     const socket = socketIOClient('http://localhost:5001'); 
     socket.on('receive_image', (data) => {
-      console.log('Received image')
       const imageData = data.image;
       setReceivedImage('data:image/png;base64,' + imageData);
-    });
-
-    socket.on('checker', (data) => {
-      console.log(data)
     });
 
     // Clean up the socket connection when the component unmounts
@@ -59,6 +55,7 @@ function App() {
   };
 
   return (
+    <UserProvider>
     <div className="app">
       <header>
         <Navbar
@@ -79,6 +76,7 @@ function App() {
         </div>
       </main>
     </div>
+    </UserProvider>
   );
 };
 

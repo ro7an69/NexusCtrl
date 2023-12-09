@@ -13,9 +13,11 @@ import png10 from "../assets/Picture11.png";
 import png11 from "../assets/Picture12.png";
 import png12 from "../assets/Picture13.png";
 import socketIOClient from 'socket.io-client';
+import { saveSettingsToFirebase } from './firebaseSaveUtils'
 
 function Gestures() {
-  const [selectedOptions, setSelectedOptions] = useState(Array(14).fill("Not Assigned"));
+  const [selectedOptions, setSelectedOptions] = useState(Array(12).fill("Not Assigned"));
+  const [showAlert, setShowAlert] = useState(false);
 
   const handleDropdownChange = (index, event) => {
     const updatedOptions = [...selectedOptions];
@@ -26,53 +28,99 @@ function Gestures() {
   useEffect(() => {
     // Load saved gestures from local storage
     const storedGestures = localStorage.getItem('userGestures');
+    console.log(storedGestures);
     if (storedGestures) {
       const parsedGestures = JSON.parse(storedGestures);
       setSelectedOptions(parsedGestures);
     }
+    else {
+      const defaultGestures = [
+        "Not Assigned",
+        "move_cursor",
+        "scroll_up",
+        "scroll_down",
+        "click",
+        "double_click",
+        "right_click",
+        "Not Assigned",
+        "Not Assigned",
+        "Not Assigned",
+        "Not Assigned",
+        "Not Assigned",
+        "Not Assigned"
+      ];
+      setSelectedOptions(defaultGestures);
+    }
   }, []);
-
   const handleSaveClick = () => {
-    // Save the selected gestures to local storage
-    localStorage.setItem('userGestures', JSON.stringify(selectedOptions));
 
-    // Create a socket connection only when Save button is pressed
-    const socket = socketIOClient('http://localhost:5001');
+    setShowAlert(true);
+
+    setTimeout(() => {
+      const alertElement = document.querySelector('.customAlert');
+      if (alertElement) {
+        alertElement.classList.add('fadeOut');
+      }
+    }, 1500);
+
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+
+    const SERVER_URL = 'http://127.0.0.1:5001';
+    const socket = socketIOClient(SERVER_URL);
 
     // Log the socket connection status
     console.log('Socket connection status:', socket.connected);
-
-    // Wait for the connection to be fully established before emitting the event
-    socket.on('connect', () => {
-      console.log('Socket connected:', socket.id);
-
-      // Emit an event to the Flask server with the saved gestures
+    const storedUser = localStorage.getItem('authUser');
+    if (storedUser) {
       socket.emit('gestures-saved', selectedOptions);
-
+      const authUser = JSON.parse(storedUser);
       // Terminate the socket connection when not in use
-      socket.disconnect();
-      console.log('Socket disconnected');
-    });
-
-    // Construct a message that includes the saved functions for each png
-    const saveMessage = selectedOptions.map((option, index) => {
-  return `png ${index + 1}: ${option}`;
-}).join('\n');
-
-    // Show the message using an alert
-    alert(`Updated gestures have been saved!\n\n${saveMessage}`);
-
+      socket.on('settings', (data) => {
+        const saveData = {
+          data,
+          uid: authUser.uid,
+        };
+        saveSettingsToFirebase(saveData).then(() => {
+          console.log('Settings saved successfully');
+          // Further UI updates or notifications
+        })
+        .catch(error => {
+          console.error('Error saving settings:', error);
+        });
+        socket.disconnect();
+        console.log('Socket disconnected');
+      });
+    }
+    else {
+      socket.on('connect', () => {
+        console.log('Socket connected:', socket.id);
+        // Emit the event
+        socket.emit('gestures-saved', selectedOptions);
+        localStorage.setItem('userGestures', JSON.stringify(selectedOptions));
+        // Terminate the socket connection when not in use
+        socket.disconnect();
+        console.log('Socket disconnected');
+      });
+    }
   };
 
   const pngs = [png1, png2, png3, png4, png5, png6, png7, png8, png9, png10, png11, png12];
 
   return (
     <div className={styles.container}>
-      {/* Set a fixed height and enable scrolling */}
+      {showAlert && (
+        <div className={styles.customAlert}>
+          Gesture Functions have been saved!
+        </div>
+      )}
       <div className={styles.right}>
       <div className={styles.gestureHeader}>
         <div className={styles.gestureTitle}>Gestures</div>
-        <div className={styles.saveButton} onClick={handleSaveClick}>Save</div>
+    <div className={styles.saveButton} onClick={handleSaveClick}>
+      Save
+    </div>
       </div>
       <div className={styles.gestureList}>
         {pngs.map((png, index) => (
@@ -93,13 +141,14 @@ function Gestures() {
                 <option value="middle_click">Middle Click</option>
                 <option value="scroll_up">Scroll Up</option>
                 <option value="scroll_down">Scroll Down</option>
+              </optgroup>
+              <optgroup label="Keyboard">
+                <option value="open_osk_with_size">Open Keyboard</option>
                 <option value="press_left">Press Left</option>
                 <option value="press_up">Press Up</option>
                 <option value="press_down">Press Down</option>
                 <option value="press_right">Press Right</option>
-              </optgroup>
-              <optgroup label="Keyboard">
-                <option value="open_osk_with_size">Open Keyboard</option>
+                <option value="press_space">Press Space</option>
                 <option value="copy">Copy</option>
                 <option value="paste">Paste</option>
                 <option value="zoom_in">Zoom in</option>
