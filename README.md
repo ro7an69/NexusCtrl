@@ -14,7 +14,13 @@ To run the frontend using NodeJS, make sure npm is installed.
     cd yourpath/frontend
     ```
 
-2. Run the following command to start the frontend:
+2. Run the following command to install react-scripts:
+
+   ```bash
+   npm install react-scripts
+   ```
+
+3. Run the following command to start the frontend:
 
     ```bash
     npm start
