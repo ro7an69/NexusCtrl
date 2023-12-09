@@ -11,7 +11,7 @@ To run the frontend using NodeJS, make sure npm is installed.
 1. Open a terminal and navigate to the frontend directory:
 
     ```bash
-    cd yourpath/CSIT-321-PROJECT-NEXUS-CTRL-/front-end1/front-end1
+    cd yourpath/frontend
     ```
 
 2. Run the following command to start the frontend:
@@ -27,7 +27,7 @@ To run the backend using Python, follow these steps:
 1. Create a virtual environment by navigating to the project's root directory:
 
     ```bash
-    cd yourpath/CSIT-321-PROJECT-NEXUS-CTRL-/NexusCtrl
+    cd yourpath/backend
     python -m venv venv
     ```
 
