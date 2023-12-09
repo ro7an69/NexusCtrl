@@ -1,0 +1,66 @@
+.navbar {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Sarala-Regular', sans-serif;
+  background: hsla(204, 70%, 76%, 1);
+  background: linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
+  background: -moz-linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
+  background: -webkit-linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#99CCED", endColorstr="#FFFFFF", GradientType=1 );
+}
+.logo-image {
+  width: 35%;
+  height: auto;
+  margin-top: 10px;
+  position: relative;
+  z-index: 1;
+  padding:0.5%;
+}
+
+.menu {
+  display: flex;
+  margin-right: 20px;
+}
+
+.menu-li {
+  padding: 2rem;
+  margin-left: 5px;
+}
+.menu-link span {
+
+  /* Other text styles */
+
+  font-family: 'Gilroy-Bold', sans-serif;
+
+}
+
+/* Custom class for the links within the menu items */
+.menu-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Add the style for the hover effect on the menu icons */
+
+.menu-link:hover svg {
+  fill: #fff; /* Set the icon color to white on hover */
+  background-color: #2587be; /* Set the dark blue background color for the hover effect */
+  border-radius: 50%; /* To make a circular background around the icon */
+  padding: 6px; /* Add some padding to increase the size of the background */
+  transform: scale(1.3); /* Scale the icon to compensate for the padding */
+  transition: transform 0.2s ease; /* Add a smooth transition for the scaling */
+}
+
+/* Add this to your existing CSS */
+
+.menu-link.selected svg {
+  fill: #fff; /* Set the icon color to white when selected */
+  background-color: #2587be; /* Set the dark blue background color when selected */
+  border-radius: 50%; /* To make a circular background around the icon when selected */
+  padding: 6px; /* Add some padding to increase the size of the background when selected */
+  transform: scale(1.3); /* Scale the icon to compensate for the padding when selected */
+  transition: transform 0.2s ease; /* Add a smooth transition for the scaling when selected */
+}
