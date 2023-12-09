@@ -5,19 +5,23 @@
   justify-content: space-between;
   align-items: center;
   font-family: 'Sarala-Regular', sans-serif;
-  background: hsla(204, 70%, 76%, 1);
-  background: linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
-  background: -moz-linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
-  background: -webkit-linear-gradient(90deg, hsla(204, 70%, 76%, 1) 0%, hsla(0, 0%, 100%, 1) 100%);
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#99CCED", endColorstr="#FFFFFF", GradientType=1 );
+
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, .15);
+  
+  backdrop-filter: blur(5px);
 }
+
+
 .logo-image {
-  width: 35%;
+  width: 38%;
   height: auto;
-  margin-top: 10px;
+  margin-top: 0px;
   position: relative;
   z-index: 1;
   padding:0.5%;
+  margin-left: -80px;
 }
 
 .menu {
@@ -47,7 +51,7 @@
 
 .menu-link:hover svg {
   fill: #fff; /* Set the icon color to white on hover */
-  background-color: #2587be; /* Set the dark blue background color for the hover effect */
+  background-color: #292c3e; /* Set the dark blue background color for the hover effect */
   border-radius: 50%; /* To make a circular background around the icon */
   padding: 6px; /* Add some padding to increase the size of the background */
   transform: scale(1.3); /* Scale the icon to compensate for the padding */
@@ -58,7 +62,7 @@
 
 .menu-link.selected svg {
   fill: #fff; /* Set the icon color to white when selected */
-  background-color: #2587be; /* Set the dark blue background color when selected */
+  background-color: #292c3e; /* Set the dark blue background color when selected */
   border-radius: 50%; /* To make a circular background around the icon when selected */
   padding: 6px; /* Add some padding to increase the size of the background when selected */
   transform: scale(1.3); /* Scale the icon to compensate for the padding when selected */

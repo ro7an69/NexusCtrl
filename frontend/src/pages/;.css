@@ -43,7 +43,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100%;
-  margin-top: 5%; 
+  margin-top: 5%; /* Adjust this value to move the title higher */
   margin-left: 1%;
   margin-bottom: 1%;
 }
@@ -264,7 +264,7 @@ div.signInContainer .formGroup input[type="password"]:hover::placeholder {
   font-weight: 400;
   margin-top: 5%; /* Adjust this value to control the spacing */
   margin-bottom: 10%; /* Adjust this value to control the spacing */
-  margin-right: 1%;
+ 
   text-align: center;
 }
 

@@ -5,6 +5,38 @@
   
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.customAlert {
+
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: lightgreen;
+  font-family: 'Gilroy-Bold', sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it's above other elements */
+  animation: fadeIn 0.5s ease-in;
+}
+
+.customAlert.fadeOut {
+  /* Fade out effect */
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+
 .DeadZone {
   margin-left: -5%;
   margin-top: 10%;
@@ -36,7 +68,7 @@
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #800080;
+  background: #292c3e;
   border: 3px solid #000000;
   border-radius: 50%; /* Make the thumb circular */
   cursor: pointer;
@@ -70,8 +102,6 @@ body {
   position: relative;
   
 }
-  
-  /* Add this section for split background */
   
   .content {
     color: #000;
@@ -197,7 +227,7 @@ body {
   width: 15px;
   height: 15px;
   border-radius: 100%;
-  background-color: #800080;
+  background-color: #292c3e;
 }
 
   .radioButton1 {
@@ -301,7 +331,7 @@ body {
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #800080;
+  background: #292c3e;
   border: 3px solid #000000;
   border-radius: 50%; /* Make the thumb circular */
   cursor: pointer;
@@ -382,7 +412,7 @@ body {
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #800080;
+  background: #292c3e;
   border: 3px solid #000000;
   border-radius: 50%; /* Make the thumb circular */
   cursor: pointer;
@@ -455,7 +485,7 @@ body {
   appearance: none;
   width: 25px;
   height: 25px;
-  background: #800080;
+  background: #292c3e;
   border: 3px solid #000000;
   border-radius: 50%; /* Make the thumb circular */
   cursor: pointer;
@@ -590,8 +620,12 @@ body {
   
 
   .saveButton {
-  background: #84A0BD; /* Adjusted to match the screenshot */
-  color: #000; /* Assuming the text color is white based on the screenshot */
+    background: linear-gradient(to bottom, #333333, #555555);
+    /* Other button styles */
+    color: white; /* Text color */
+    border: 1px solid #333333; /* Border color */
+    
+  transition: background-color 0.3s ease;
   font-family: 'Gilroy-Medium', sans-serif;
   font-size: 24px;
   width: 23%; /* Adjusted to content size, consider setting a min-width if needed */
@@ -603,7 +637,7 @@ body {
   align-items: center;
   cursor: pointer;
   padding: 10px 20px; /* Adjusted for more noticeable padding */
-  border: 2px solid #718DA3; /* Adjusted to match the button border */
+ 
   border-radius: 25px; /* Adjusted for more rounded corners */
   transition: background 0.3s;
   margin-top: 1%;
@@ -612,8 +646,20 @@ body {
   
 }
   .saveButton:hover {
-    background: #5A88FF;
     
+    background: linear-gradient(to bottom, #333333, #555555); /* Maintain the same dark gray gradient */
+  box-shadow: 0 0 10px 2px #6c5ce7; /* Adding a shadow effect of a different color */
+  }
+  /* Add a line above section titles with a specified background color */
+  .sectionBackground {
+    background: rgba(0, 0, 0, 0.21);
+    height: 2px; /* Adjust the height of the line as needed */
+    width: 95%; /* Make the line span the full width */
+    margin-bottom: 2%; /* Adjust the margin spacing above the line as needed */
+    margin-right: 5%;
+    padding-bottom: 0;
+
+
   }
   /* Add a line above section titles with a specified background color */
   .sectionBackground {
@@ -642,7 +688,3 @@ body {
     margin-top: 5%;
    
   }
-
-
-  
-  /* Rest of your existing CSS code remains unchanged */

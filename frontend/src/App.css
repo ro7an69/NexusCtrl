@@ -1,24 +1,15 @@
 /* App.css */
-body{
+body {
+  background: url("./assets/backgroundImage.png") no-repeat;
   padding: 0;
   overflow: hidden;
-  margin: 0;
-  background: hsla(204, 42%, 44%, 1);
-
-  background: linear-gradient(90deg, hsla(204, 42%, 44%, 1) 0%, hsla(204, 70%, 76%, 1) 100%);
-  
-  background: -moz-linear-gradient(90deg, hsla(204, 42%, 44%, 1) 0%, hsla(204, 70%, 76%, 1) 100%);
-  
-  background: -webkit-linear-gradient(90deg, hsla(204, 42%, 44%, 1) 0%, hsla(204, 70%, 76%, 1) 100%);
-  
-  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#417BA1", endColorstr="#99CCED", GradientType=1 );
+  margin: 0;  
 }
+
 .main-content {
-  
   display: flex;
   justify-content: space-around;
-  margin-top: -3%;
- 
+ margin-top: -3%;
 }
 .cameraTitle {
   color: #000;

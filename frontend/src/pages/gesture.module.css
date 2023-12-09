@@ -1,9 +1,13 @@
 .right {
   flex: 1;
-  background-color: #DCE6FF47;
   max-height: 100%;
   overflow-y: auto;
   margin-top: 2%;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .2); 
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, .15);
+  
+  backdrop-filter: blur(10px);
 }
 
 
@@ -42,6 +46,7 @@ body {
   margin-left: 1%;
   margin-bottom: 1%;
 }
+
 .gestureHeader {
   display: flex;
   flex-direction: column;
@@ -49,32 +54,63 @@ body {
   margin-bottom: 2%;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.customAlert {
+
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: lightgreen;
+  font-family: 'Gilroy-Bold', sans-serif;
+  font-size: 28px;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it's above other elements */
+  animation: fadeIn 0.5s ease-in;
+
+}
+
+.customAlert.fadeOut {
+  animation: fadeOut 0.5s ease-out forwards;
+}
 
 .saveButton {
-background: #84A0BD; /* Adjusted to match the screenshot */
-color: #000; /* Assuming the text color is white based on the screenshot */
-font-family: 'Sarala', sans-serif;
-font-size: 24px;
-width: 23%; /* Adjusted to content size, consider setting a min-width if needed */
-font-style: normal;
-font-weight: 400;
-line-height: normal;
-display: flex;
-justify-content: center;
-align-items: center;
-cursor: pointer;
-padding: 10px 20px; /* Adjusted for more noticeable padding */
-border: 2px solid #718DA3; /* Adjusted to match the button border */
-border-radius: 25px; /* Adjusted for more rounded corners */
-transition: background 0.3s;
-margin-top: 1%;
-margin-left: 1%;
-text-shadow: none; /* Assuming there is no text shadow as per the screenshot */
+  background: linear-gradient(to bottom, #333333, #555555);
+  color: white; /* Text color */
+  border: 1px solid #333333; /* Border color */
+  transition: background-color 0.3s ease;
+  font-family: 'Gilroy-Medium', sans-serif;
+  font-size: 24px;
+  width: 23%; /* Adjusted to content size, consider setting a min-width if needed */
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 10px 20px; /* Adjusted for more noticeable padding */
+  border-radius: 25px; /* Adjusted for more rounded corners */
+  transition: background 0.3s;
+  margin-top: 1%;
+  margin-left: 1%;
+  text-shadow: none; /* Assuming there is no text shadow as per the screenshot */
 
 }
 .saveButton:hover {
-  background: #5A88FF;
-  
+  background: linear-gradient(to bottom, #333333, #555555); /* Maintain the same dark gray gradient */
+  box-shadow: 0 0 10px 2px #6c5ce7; /* Adding a shadow effect of a different color */
 }
 
 .container {
@@ -89,16 +125,26 @@ text-shadow: none; /* Assuming there is no text shadow as per the screenshot */
   justify-content: space-around; /* Adjust as needed */
   padding: 20px;
   align-items: center;
+  
 }
+
+.dropdown-font-style {
+  font-family: Arial, Helvetica, sans-serif; /* Example font */
+  font-size: 16px; /* Example font size */
+  color: #333; /* Example text color */
+  /* Add other styling as needed */
+}
+
 
 .gestureItem {
   width: 30%; /* Set width to 30% for three gestures per row */
   margin-bottom: 20px;
-  
   display: flex;
   flex-direction: column;
   align-items: center; /* Center items horizontally within each .gestureItem */
+  font-family: 'Gilroy-Bold', sans-serif;
 }
+
 .png {
   width: 100%;
   max-width: 150px;
@@ -129,6 +175,7 @@ select {
   width: 75%; /* Adjust width as needed */
   font-size: 16px; /* Adjust font size as needed */
   font-family: 'Gilroy-Medium', sans-serif; 
+  background-color: transparent;
   border: 2px solid #555;
   border-radius: 8px;
   border: 1px solid #000; /* Equivalent to border */

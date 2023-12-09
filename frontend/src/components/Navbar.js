@@ -3,7 +3,7 @@ import styles from './navbar.module.css';
 import { FaHome } from "react-icons/fa";
 import { GiSettingsKnobs } from 'react-icons/gi';
 import { PiHandWavingFill } from 'react-icons/pi';
-import LogoAndText from "../assets/textAndLogo.png";
+import LogoAndText from "../assets/textWithLogo.png";
 
 function Navbar({ onShowHome, onShowGestures, onShowSettings }) {
   const [selectedButton, setSelectedButton] = useState('home');
