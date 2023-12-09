@@ -1,0 +1,7 @@
+opencv-python
+mediapipe
+pyautogui
+tensorflow
+flask
+flask-socketio
+flask-cors
