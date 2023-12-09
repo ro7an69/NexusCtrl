@@ -1,0 +1,116 @@
+
+.right {
+  flex: 1;
+  background-color: #DCE6FF47;
+  max-height: 100%;
+  overflow-y: auto;
+  margin-top: 2%;
+}
+
+
+body {
+  background-size: cover;
+  position: relative;
+}
+
+.container {
+  display: flex;
+  height: 85vh;
+}
+
+.content {
+  color: #000;
+  font-family: 'Gilroy-Bold', sans-serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80%;
+  margin-top: -36%; /* Adjust this value to move the title higher */
+  margin-left: -10%;
+}
+
+.homeTitle {
+  color: #000;
+  font-family: 'Gilroy-Bold', sans-serif;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: 5%; /* Adjust this value to move the title higher */
+  margin-left: 1%;
+  margin-bottom: 1%;
+}
+.homeHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 5%;
+}
+
+.parent {
+  /* Adjust the margin-top to move the button container up */
+  display: flex;
+  gap: 30px;
+  margin-left: 5%;
+  justify-content: center;
+  align-items: center;
+  border: 10px solid transparent; /* Add a border */ 
+}
+.child {
+  width: 220px;
+  height: 59px;
+  border-radius: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #000;
+  position: relative;
+  transition: background-color 0.3s, color 0.3s;
+  line-height: 59px;
+  border: 1px solid #000;  
+  font-family: 'Gilroy-Bold', sans-serif;
+
+  
+  
+}
+
+.child:hover {
+  background-color: #84A0BD;
+  color: white;
+}
+
+.child::before, .child::after {
+  content: '';
+  position: absolute;
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  border: 5px solid #84A0BD;
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+
+.child::before {
+  top: 3px;
+  left: 3px;
+}
+
+.child::after {
+  bottom: 3px;
+  right: 3px;
+}
+
+.child:hover::before, .child:hover::after {
+  opacity: 1;
+}
